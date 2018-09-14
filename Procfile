@@ -1,1 +1,1 @@
-web: target/release/./rustysignal
+web: ./target/release/rustysignal
