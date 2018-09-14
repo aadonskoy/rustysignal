@@ -64,8 +64,9 @@ impl Handler for Server {
     fn on_message(&mut self, msg: Message) -> Result<()> {
         let msg_string: &str = msg.as_text()?;
         // WARNING: PROTOCOL SPECIFIC
+        println!("on_message: {:?}", &msg_string);
         let json_message: Value = serde_json::from_str(msg_string).unwrap_or(Value::default());
-        
+
         let protocol = match json_message["protocol"].as_str() {
             Some(desired_protocol) => { Some(desired_protocol) },
             _ => { None }
@@ -79,6 +80,7 @@ impl Handler for Server {
                 self.node.borrow().sender.send(msg_string)
             },
             Some("one-to-one") => {
+                println!("protocol: one-to-one session message");
                 match json_message["to"].as_str() {
                     Some(receiver) => {
                         let receiver_index = self.network.borrow().index_of(&receiver);
@@ -103,7 +105,7 @@ impl Handler for Server {
                         )
                     }
                 }
-                
+
             }
             _ => {
                 self.node.borrow().sender.send(
@@ -143,11 +145,11 @@ fn main() {
             // Construct the server
             let node = Node { owner: None, sender };
             let _node = network.borrow_mut().add_node(node);
-            Server { 
+            Server {
                 node: _node,
                 count: count.clone(),
                 network: network.clone()
             }
         }
     ).unwrap()
-} 
+}
