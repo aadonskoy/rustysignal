@@ -2,6 +2,7 @@ extern crate ws;
 extern crate serde_json;
 
 use std::str;
+use std::env;
 use std::rc::Rc;
 use std::rc::Weak;
 use std::cell::Cell;
@@ -137,10 +138,17 @@ impl Handler for Server {
 }
 
 fn main() {
+    let port = env::var("PORT");
+    let address =
+        match port {
+            Ok(port) => format!("127.0.0.1:{}", port),
+            Err(_) => String::from("127.0.0.1:3012"),
+        };
+
     let count = Rc::new(Cell::new(0));
     let network = Rc::new(RefCell::new(Network::default()));
 
-    listen("127.0.0.1:3012",
+    listen(address,
         |sender| {
             // Construct the server
             let node = Node { owner: None, sender };
