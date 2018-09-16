@@ -1,1 +1,1 @@
-web: ./target/release/rustysignal
+web: PORT=$PORT ./target/release/rustysignal
