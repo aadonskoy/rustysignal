@@ -141,8 +141,8 @@ fn main() {
     let port = env::var("PORT");
     let address =
         match port {
-            Ok(port) => format!("127.0.0.1:{}", port),
-            Err(_) => String::from("127.0.0.1:3012"),
+            Ok(port) => format!("0.0.0.0:{}", port),
+            Err(_) => String::from("0.0.0.0:3012"),
         };
 
     let count = Rc::new(Cell::new(0));
